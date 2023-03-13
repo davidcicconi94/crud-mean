@@ -3,6 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Student } from 'src/app/interfaces/Student';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditStudentsComponent } from '../add-edit-students/add-edit-students.component';
 
 @Component({
   selector: 'app-list-students',
@@ -10,13 +12,20 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./list-students.component.css'],
 })
 export class ListStudentsComponent {
-  displayedColumns: string[] = ['name', 'lastname', 'genre', 'dni', 'bornDate'];
+  displayedColumns: string[] = [
+    'name',
+    'lastname',
+    'genre',
+    'dni',
+    'bornDate',
+    'actions',
+  ];
   dataSource: MatTableDataSource<Student>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.dataSource = new MatTableDataSource(studentsList);
   }
 
@@ -28,6 +37,13 @@ export class ListStudentsComponent {
   applyFilter(e: Event) {
     const filterValue = (e.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  addOrEdit(): void {
+    const dialogRef = this.dialog.open(AddEditStudentsComponent, {
+      width: '550px',
+      height: '550px',
+    });
   }
 }
 

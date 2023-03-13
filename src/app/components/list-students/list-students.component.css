@@ -1,9 +1,32 @@
-#title-app {
-    margin-left: 20px;
+mat-form-field {
+  font-size: 14px;
+  width: 30vw;
+  margin-right: 10px;
+}
+
+
+
+.btnEdit, .btnDelete {
+  cursor: pointer;
+}
+
+.btnDelete {
+  color: #a50024;
+}
+
+.btnEdit {
+  color: #376DCD;
 }
 
 .card {
-  width: 50%;
-  margin:50px auto 50px
+  padding: 70px;
+  margin-top: 50px;
+  background-color: rgb(252, 252, 252);
+  border-radius: 40px;
 }
 
+.flex {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
