@@ -25,7 +25,10 @@ export class ListStudentsComponent {
     this.dataSource.sort = this.sort;
   }
 
-  applyFilter(e: Event) {}
+  applyFilter(e: Event) {
+    const filterValue = (e.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
 
 export interface PeriodicElement {
@@ -37,7 +40,7 @@ export interface PeriodicElement {
 
 const studentsList: Student[] = [
   {
-    name: 'David',
+    name: 'Mia',
     lastname: 'Cicconi',
     genre: 'Male',
     dni: 37447255,
