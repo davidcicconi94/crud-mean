@@ -11,15 +11,19 @@ import { Student } from 'src/app/interfaces/Student';
 export class AddEditStudentsComponent {
   form: FormGroup;
 
+  maxDate: Date;
+
   constructor(
     public dialogRef: MatDialogRef<AddEditStudentsComponent>,
     private fb: FormBuilder
   ) {
+    this.maxDate = new Date();
+
     this.form = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(10)]],
       lastname: ['', Validators.required],
       genre: ['', Validators.required],
-      dni: [null, Validators.required],
+      dni: [null, [Validators.required, Validators.pattern('^[0-9]*$')]],
       bornDate: [null, Validators.required],
     });
   }
@@ -38,7 +42,5 @@ export class AddEditStudentsComponent {
       dni: this.form.value.dni,
       bornDate: this.form.value.bornDate,
     };
-
-    console.log(student);
   }
 }

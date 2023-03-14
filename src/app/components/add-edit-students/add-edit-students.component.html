@@ -6,13 +6,16 @@
       <mat-label>Name</mat-label>
       <input formControlName="name" matInput autocomplete="off" autofocus />
     </mat-form-field>
-    <div
-      *ngIf="
-        form.get('name')?.hasError('required') && form.get('name')?.touched
-      "
-      class="error"
-    >
-      <p>Name is required.</p>
+    <div class="error">
+      <span
+        *ngIf="
+          form.get('name')?.hasError('required') && form.get('name')?.touched
+        "
+        >Name is required.</span
+      >
+      <span *ngIf="form.get('name')?.hasError('maxLength')"
+        >Maximum characters exceeded</span
+      >
     </div>
 
     <div class="row">
@@ -20,14 +23,14 @@
         <mat-label>Lastname</mat-label>
         <input formControlName="lastname" matInput />
       </mat-form-field>
-      <div
-        *ngIf="
-          form.get('lastname')?.hasError('required') &&
-          form.get('lastname')?.touched
-        "
-        class="error"
-      >
-        <p>Lastname is required.</p>
+      <div class="error">
+        <span
+          *ngIf="
+            form.get('lastname')?.hasError('required') &&
+            form.get('lastname')?.touched
+          "
+          >Lastname is required.</span
+        >
       </div>
     </div>
 
@@ -40,21 +43,54 @@
         <option value="other">Other</option>
       </select>
     </mat-form-field>
+    <div class="error">
+      <span
+        *ngIf="
+          form.get('genre')?.hasError('required') && form.get('genre')?.touched
+        "
+      >
+        Genre is required.
+      </span>
+    </div>
 
     <mat-form-field appearance="fill">
       <mat-label>DNI</mat-label>
       <input formControlName="dni" type="number" matInput />
     </mat-form-field>
+    <div class="error">
+      <span
+        *ngIf="
+          form.get('dni')?.hasError('required') && form.get('dni')?.touched
+        "
+      >
+        DNI is required.
+      </span>
+    </div>
 
     <mat-form-field appearance="fill">
       <mat-label>Born Date</mat-label>
-      <input formControlName="bornDate" matInput [matDatepicker]="picker1" />
+      <input
+        [max]="maxDate"
+        formControlName="bornDate"
+        matInput
+        [matDatepicker]="picker1"
+      />
       <mat-datepicker-toggle
         matIconSuffix
         [for]="picker1"
       ></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
     </mat-form-field>
+    <div class="error">
+      <span
+        *ngIf="
+          form.get('bornDate')?.hasError('required') &&
+          form.get('bornDate')?.touched
+        "
+      >
+        Born date is required.
+      </span>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button

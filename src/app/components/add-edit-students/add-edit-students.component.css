@@ -4,8 +4,10 @@ h2 {
 
 mat-form-field {
     width: 100%;
+    margin-bottom: -10px;
 }
 
-p {
-    color: #a50024;
+span {
+    color: red;
 }
+
