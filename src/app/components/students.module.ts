@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { ListStudentsComponent } from './list-students/list-students.component';
 import { AddEditStudentsComponent } from './add-edit-students/add-edit-students.component';
 
@@ -16,7 +18,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [ListStudentsComponent, AddEditStudentsComponent],
@@ -37,6 +41,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   exports: [ListStudentsComponent, AddEditStudentsComponent],
 })

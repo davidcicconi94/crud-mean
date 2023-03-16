@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Student } from 'src/app/interfaces/Student';
+import { StudentService } from 'src/app/services/student.service';
 
 @Component({
   selector: 'app-add-edit-students',
@@ -10,12 +11,13 @@ import { Student } from 'src/app/interfaces/Student';
 })
 export class AddEditStudentsComponent {
   form: FormGroup;
-
+  loading: boolean = false;
   maxDate: Date;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditStudentsComponent>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _studentService: StudentService
   ) {
     this.maxDate = new Date();
 
@@ -42,5 +44,12 @@ export class AddEditStudentsComponent {
       dni: this.form.value.dni,
       bornDate: this.form.value.bornDate,
     };
+
+    this.loading = true;
+
+    this._studentService.addStudent(student).subscribe((data) => {
+      this.loading = false;
+      this.closeDialog();
+    });
   }
 }

@@ -2,7 +2,9 @@
   <span id="title-app">List of students</span>
 </mat-toolbar>
 
-<mat-card class="card">
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+<mat-card *ngIf="!loading" class="card">
   <div class="flex">
     <div>
       <mat-form-field appearance="outline">
@@ -46,9 +48,7 @@
     <ng-container matColumnDef="bornDate">
       <th mat-header-cell *matHeaderCellDef>Born Date</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.bornDate.getFullYear() }}-{{
-          element.bornDate.getMonth() + 1
-        }}-{{ element.bornDate.getDate() + 1 }}
+        {{ element.bornDate | date : "dd/MM/yyy" }}
       </td>
     </ng-container>
 
@@ -63,7 +63,12 @@
         <mat-icon (click)="addOrEdit()" class="btnEdit" matTooltip="Editar"
           >edit</mat-icon
         >
-        <mat-icon class="btnDelete" matTooltip="Delete">delete</mat-icon>
+        <mat-icon
+          (click)="deleteStudent(element.dni)"
+          class="btnDelete"
+          matTooltip="Delete"
+          >delete</mat-icon
+        >
       </td>
     </ng-container>
 

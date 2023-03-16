@@ -11,3 +11,12 @@ span {
     color: red;
 }
 
+.title-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.spinner {
+margin-right: 20px;
+margin-top: 20px;
+}

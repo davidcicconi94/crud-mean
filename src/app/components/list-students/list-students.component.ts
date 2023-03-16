@@ -1,17 +1,19 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { Student } from 'src/app/interfaces/Student';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditStudentsComponent } from '../add-edit-students/add-edit-students.component';
+import { StudentService } from 'src/app/services/student.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-list-students',
   templateUrl: './list-students.component.html',
   styleUrls: ['./list-students.component.css'],
 })
-export class ListStudentsComponent {
+export class ListStudentsComponent implements OnInit {
   displayedColumns: string[] = [
     'name',
     'lastname',
@@ -22,16 +24,23 @@ export class ListStudentsComponent {
   ];
   dataSource: MatTableDataSource<Student>;
 
+  loading: boolean = false;
+
+  durationInSeconds: number = 3;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog: MatDialog) {
-    this.dataSource = new MatTableDataSource(studentsList);
+  constructor(
+    public dialog: MatDialog,
+    private _studentService: StudentService,
+    private _snackBar: MatSnackBar
+  ) {
+    this.dataSource = new MatTableDataSource();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngOnInit(): void {
+    this.getStundents();
   }
 
   applyFilter(e: Event) {
@@ -44,57 +53,35 @@ export class ListStudentsComponent {
       width: '550px',
       height: '550px',
     });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getStundents();
+    });
+  }
+
+  getStundents() {
+    this.loading = true;
+
+    this._studentService.getStudent().subscribe((data: any) => {
+      this.loading = false;
+      this.dataSource.data = data.students;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
+  }
+
+  deleteStudent(_id: number): void {
+    this.loading = true;
+    this._studentService.deleteStudent(_id).subscribe((data) => {
+      this.loading = false;
+      this.getStundents();
+      this.deletedMsg();
+    });
+  }
+
+  deletedMsg(): void {
+    this._snackBar.open(`Student was successfully deleted.`, '', {
+      duration: this.durationInSeconds * 1000,
+    });
   }
 }
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const studentsList: Student[] = [
-  {
-    name: 'Mia',
-    lastname: 'Cicconi',
-    genre: 'Female',
-    dni: 57982183,
-    bornDate: new Date('2021-10-28'),
-  },
-  {
-    name: 'David',
-    lastname: 'Cicconi',
-    genre: 'Male',
-    dni: 37447255,
-    bornDate: new Date('1994-08-13'),
-  },
-  {
-    name: 'Estefania',
-    lastname: 'Astudillo',
-    genre: 'Female',
-    dni: 41002931,
-    bornDate: new Date('1998-05-23'),
-  },
-  {
-    name: 'Lionel',
-    lastname: 'Messi',
-    genre: 'Male',
-    dni: 10101101,
-    bornDate: new Date('1987-06-24'),
-  },
-  {
-    name: 'Maria Magdalena',
-    lastname: 'Santos',
-    genre: 'Female',
-    dni: 23334253,
-    bornDate: new Date('1982-01-13'),
-  },
-  {
-    name: 'Tukulito',
-    lastname: 'Sakayama',
-    genre: 'Male',
-    dni: 30229831,
-    bornDate: new Date('2002-04-02'),
-  },
-];
