@@ -20,11 +20,19 @@ export class StudentService {
     return this.http.get<Student[]>(this.appUrl + this.apiUrl);
   }
 
+  getStudentByDni(dni: number): Observable<Student> {
+    return this.http.get<Student>(this.appUrl + this.apiUrl + dni);
+  }
+
   deleteStudent(_id: number): Observable<void> {
     return this.http.delete<void>(this.appUrl + this.apiUrl + _id);
   }
 
   addStudent(student: Student): Observable<void> {
     return this.http.post<void>(this.appUrl + this.apiUrl, student);
+  }
+
+  updateStudent(dni: number, student: Student): Observable<void> {
+    return this.http.put<void>(this.appUrl + this.apiUrl + dni, student);
   }
 }

@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './list-students.component.html',
   styleUrls: ['./list-students.component.css'],
 })
-export class ListStudentsComponent implements OnInit {
+export class ListStudentsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'name',
     'lastname',
@@ -43,19 +43,26 @@ export class ListStudentsComponent implements OnInit {
     this.getStundents();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
   applyFilter(e: Event) {
     const filterValue = (e.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  addOrEdit(): void {
+  addOrEdit(dni?: number): void {
+    console.log(dni);
     const dialogRef = this.dialog.open(AddEditStudentsComponent, {
       width: '550px',
       height: '550px',
+      data: { dni },
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.getStundents();
+    dialogRef.afterClosed().subscribe((ref: boolean) => {
+      if (ref) this.getStundents();
     });
   }
 
@@ -64,9 +71,9 @@ export class ListStudentsComponent implements OnInit {
 
     this._studentService.getStudent().subscribe((data: any) => {
       this.loading = false;
-      this.dataSource.data = data.students;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.data = data;
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 

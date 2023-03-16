@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Student } from 'src/app/interfaces/Student';
 import { StudentService } from 'src/app/services/student.service';
 
@@ -13,11 +13,15 @@ export class AddEditStudentsComponent {
   form: FormGroup;
   loading: boolean = false;
   maxDate: Date;
+  title: string = 'Add a new student';
+  dni: number | undefined;
+  buttonName: string = 'Add';
 
   constructor(
     public dialogRef: MatDialogRef<AddEditStudentsComponent>,
     private fb: FormBuilder,
-    private _studentService: StudentService
+    private _studentService: StudentService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.maxDate = new Date();
 
@@ -28,10 +32,36 @@ export class AddEditStudentsComponent {
       dni: [null, [Validators.required, Validators.pattern('^[0-9]*$')]],
       bornDate: [null, Validators.required],
     });
+    this.dni = data.dni;
+  }
+
+  ngOnInit(): void {
+    this.isEdit(this.dni);
   }
 
   closeDialog(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
+  }
+
+  isEdit(dni: number | undefined) {
+    if (dni !== undefined) {
+      this.title = 'Edit student';
+      this.buttonName = 'Edit';
+
+      this.getStudent(dni);
+    }
+  }
+
+  getStudent(dni: number) {
+    this._studentService.getStudentByDni(dni).subscribe((data: Student) => {
+      this.form.setValue({
+        name: data.name,
+        lastname: data.lastname,
+        genre: data.genre,
+        dni: data.dni,
+        bornDate: data.bornDate,
+      });
+    });
   }
 
   addOrEdit() {
@@ -49,7 +79,8 @@ export class AddEditStudentsComponent {
 
     this._studentService.addStudent(student).subscribe((data) => {
       this.loading = false;
-      this.closeDialog();
+
+      this.dialogRef.close(true);
     });
   }
 }
